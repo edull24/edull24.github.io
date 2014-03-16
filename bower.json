@@ -1,0 +1,22 @@
+{
+  "name": "edull24.github.io",
+  "version": "0.1.0",
+  "homepage": "http://edull24.github.io",
+  "authors": [
+    "edull24 <evandull@gmail.com>"
+  ],
+  "description": "A listing of open source efforts by edull24 on GitHub",
+  "main": "index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "foundation": "~5.2.1"
+  }
+}
