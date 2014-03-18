@@ -17,6 +17,7 @@
 			dom.document = $(document);
 			dom.nav = $('nav');
 			dom.projectMenu = dom.nav.find('.project-menu');
+			dom.avatarImg = $('.avatar img');
 
 		},
 
@@ -26,16 +27,7 @@
 
 		},
 
-		addProjectsToMenu = function(repo, cnt, projects) {
-
-			var repoLen = repos.length;
-
-			if (!repoLen) {
-
-				// We have no repos.
-				return;
-
-			}
+		injectProjectsToMenu = function(repo, cnt, projects) {
 
 			cnt = cnt || 0;
 			projects = projects || [];
@@ -44,14 +36,14 @@
 
 			projects.push('<li><a href="' + repo.html_url + '">' + repo.name + '</a></li>');
 
-			if (cnt === repoLen) {
+			if (cnt === repos.length) {
 
 				// Only hit the dom once.
 				dom.projectMenu.append(projects.join(''));
 
 			} else {
 
-				addProjectsToMenu(repos[cnt], cnt, projects);
+				injectProjectsToMenu(repos[cnt], cnt, projects);
 
 			}
 
@@ -97,9 +89,16 @@
 
 					console.log( 'repos: ', repos );
 
+					if (!repos.length) {
+
+						// We have no repos.
+						return;
+
+					}
+
 					$(function() {
 
-						addProjectsToMenu();
+						injectProjectsToMenu();
 
 						$.each(repos, function(i, repo) {
 
@@ -127,5 +126,8 @@
 
 	// Start fetching the repo data.
 	getRepos();
+
+	api.getDom = function(){return dom;};
+	api.getRepos = function() {return repos;};
 
 })(window.app = window.app || {}, jQuery);
