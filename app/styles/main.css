@@ -1,6 +1,53 @@
-.avatar img {
-    max-height: 100px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    border-radius: 50%;
+/* Define mobile styles */
+@media only screen {
+
+    /* Utility */
+    .no-opacity {
+        opacity: 0;
+    }
+
+    .avatar {
+        max-height: 100px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        border-radius: 50%;
+    }
+
+    .numbers {
+        transition: opacity 0.5s;
+    }
+
+    .numbers .panel {
+        padding-bottom: 0;
+    }
+
+    /* By the numbers list items */
+    .numbers li:nth-child(n+3) {
+        padding-bottom: 0;
+    }
+
+    /* By the numbers categories */
+    .numbers li > div:first-child {
+    }
+
+    /* By the numbers values */
+    .numbers li > div:last-child {
+        font-size: 3rem;
+    }
+
+}
+
+/* min-width 641px, medium screens */
+@media only screen and (min-width: 40.063em) {
+
+    /* By the numbers list items */
+    .numbers li {
+        padding-bottom: 0;
+    }
+
+}
+
+/* min-width 1025px, large screens */
+@media only screen and (min-width: 64.063em) {
+
 }

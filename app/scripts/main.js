@@ -4,7 +4,7 @@
 
 	var dom = {},
 
-		// userData = {},
+		userData = {},
 
 		githubApi = {
 			base: 'https://api.github.com/'
@@ -17,7 +17,9 @@
 			dom.document = $(document);
 			dom.nav = $('nav');
 			dom.projectMenu = dom.nav.find('.project-menu');
-			dom.avatarImg = $('.avatar img');
+			dom.avatarImg = $('.avatar');
+			dom.numbersRow = $('.numbers');
+			dom.numberListItems = dom.numbersRow.find('li');
 
 		},
 
@@ -49,20 +51,33 @@
 
 		},
 
-		/*getUserData = function() {
+		getUserData = function() {
 
-			$.getJSON(githubApi.base, {
-				users: 'edull24'
-			})
-			.done(function(data) {
+			var url = githubApi.base + 'users/edull24';
 
-				userData = data;
-				console.log( userData );
-				setupProjectMenu();
+			$.getJSON(url)
+				.done(function(data) {
 
-			});
+					userData = data;
+					console.log( userData );
 
-		},*/
+					$(function() {
+
+						dom.numberListItems.each(function(i) {
+
+							var $val = dom.numberListItems.eq(i).find(':last-child');
+
+							$val.html(userData[$val.data('api-key')]);
+
+						});
+
+						dom.numbersRow.removeClass('no-opacity');
+
+					});
+
+				});
+
+		},
 
 		getRepos = function(page) {
 
@@ -122,12 +137,16 @@
 
 		};
 
+	// Make sure init() is registered as the first domready callback.
 	$(init);
 
-	// Start fetching the repo data.
+	// Start fetching data.
+	getUserData();
 	getRepos();
 
+	// Debug
 	api.getDom = function(){return dom;};
 	api.getRepos = function() {return repos;};
+	api.getUser= function() {return userData;};
 
 })(window.app = window.app || {}, jQuery);
