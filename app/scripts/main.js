@@ -17,9 +17,11 @@
 			dom.document = $(document);
 			dom.nav = $('nav');
 			dom.projectMenu = dom.nav.find('.project-menu');
-			dom.avatarImg = $('.avatar');
-			dom.numbersRow = $('.numbers');
+			dom.avatarImg = $('#avatar');
+			dom.numbersRow = $('#numbers');
 			dom.numberListItems = dom.numbersRow.find('li');
+			dom.reposRow = $('#repos');
+			dom.reposList = dom.reposRow.find('ul');
 
 		},
 
@@ -55,27 +57,26 @@
 
 			var url = githubApi.base + 'users/edull24';
 
-			$.getJSON(url)
-				.done(function(data) {
+			$.getJSON(url).done(function(data) {
 
-					userData = data;
-					console.log( userData );
+				userData = data;
+				console.log( userData );
 
-					$(function() {
+				$(function() {
 
-						dom.numberListItems.each(function(i) {
+					dom.numberListItems.each(function(i) {
 
-							var $val = dom.numberListItems.eq(i).find(':last-child');
+						var $val = dom.numberListItems.eq(i).find(':last-child');
 
-							$val.html(userData[$val.data('api-key')]);
-
-						});
-
-						dom.numbersRow.removeClass('no-opacity');
+						$val.html(userData[$val.data('api-key')]);
 
 					});
 
+					dom.numbersRow.removeClass('no-opacity');
+
 				});
+
+			});
 
 		},
 
@@ -113,13 +114,22 @@
 
 					$(function() {
 
+						var repoListItems = '';
+
 						injectProjectsToMenu();
 
 						$.each(repos, function(i, repo) {
 
-							
+							repoListItems += '<li class="">' +
+								'<a href="' + repo.html_url + '">' +
+								'<h2>' + repo.name + '</h2>' +
+								'<h3>' + (repo.language || '') + '</h3>' +
+								'<p>' + (repo.description || '') + '</p>' +
+								'</a></li>';
 
 						});
+
+						dom.reposList.append(repoListItems);
 
 					});
 
