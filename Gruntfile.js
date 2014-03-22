@@ -58,6 +58,10 @@ module.exports = function (grunt) {
                     '.tmp/styles/{,*/}*.css',
                     '<%= config.app %>/images/{,*/}*'
                 ]
+            },
+            handlebars: {
+                files: ['<%= config.app %>/scripts/templates/**/*.hbs'],
+                tasks: ['handlebars']
             }
         },
 
@@ -121,6 +125,7 @@ module.exports = function (grunt) {
             all: [
                 'Gruntfile.js',
                 '<%= config.app %>/scripts/{,*/}*.js',
+                '!<%= config.app %>/scripts/templates.js',
                 '!<%= config.app %>/scripts/vendor/*',
                 'test/spec/{,*/}*.js'
             ]
@@ -167,7 +172,7 @@ module.exports = function (grunt) {
                         '<%= config.dist %>/scripts/{,*/}*.js',
                         '<%= config.dist %>/styles/{,*/}*.css',
                         '<%= config.dist %>/images/{,*/}*.*',
-                        // '<%= config.dist %>/styles/fonts/{,*/}*.*',
+                        '<%= config.dist %>/styles/fonts/{,*/}*.*',
                         '<%= config.dist %>/*.{ico,png}'
                     ]
                 }
@@ -187,7 +192,17 @@ module.exports = function (grunt) {
         // Performs rewrites based on rev and the useminPrepare configuration
         usemin: {
             options: {
-                assetsDirs: ['<%= config.dist %>', '<%= config.dist %>/images']
+                assetsDirs: [
+                    '<%= config.dist %>',
+                    '<%= config.dist %>/styles',
+                    '<%= config.dist %>/images'
+                ],
+                patterns: {
+                    css: [
+                        [/(images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the CSS to reference our revved images'],
+                        [/(fonts\/.*?\.(?:eot|svg|ttf|woff))/gm, 'Update the CSS to reference our revved fonts']
+                    ]
+                }
             },
             html: ['<%= config.dist %>/{,*/}*.html'],
             css: ['<%= config.dist %>/styles/{,*/}*.css']
@@ -315,6 +330,21 @@ module.exports = function (grunt) {
                 'imagemin',
                 'svgmin'
             ]
+        },
+
+        handlebars: {
+            compile: {
+                options: {
+                    namespace: 'app.jst',
+                    processName: function(filename) {
+                        // Make the template key on app.jst[key] be just the template file name.
+                        return filename.replace(/^app\/scripts\/templates\//, '').replace(/\.hbs$/, '');
+                    }
+                },
+                files: {
+                    '<%= config.app %>/scripts/templates.js': ['<%= config.app %>/scripts/templates/**/*.hbs']
+                }
+            }
         }
     });
 
@@ -326,6 +356,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'handlebars',
             'concurrent:server',
             'autoprefixer',
             'connect:livereload',
@@ -355,6 +386,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
+        'handlebars',
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
