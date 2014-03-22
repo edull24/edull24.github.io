@@ -40,7 +40,7 @@
 	.page-wrap {
 		min-height: 100%;
 		/* Equal to footer height */
-		margin-bottom: -270px; 
+		margin-bottom: -275px; 
 	}
 
 	.page-wrap:after {
@@ -51,7 +51,7 @@
 	.site-footer,
 	.page-wrap:after {
 		margin-top: 20px;
-		height: 250px; 
+		height: 255px; 
 	}
 
 	.site-footer {
@@ -98,11 +98,30 @@
 		font-size: 12px;
 	}
 
-	#avatar {
+	#avatar .column {
+		position: relative;
+	}
+
+	#avatar .column::before {
+		content: "";
+		position: absolute;
+		width: 250px;
+		height: 10px;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		top: 50%;
+		z-index: -1;
+		border-top: 2px solid rgb(117, 117, 117);
+		border-bottom: 2px solid rgb(117, 117, 117);
+	}
+
+	#avatar img {
 		max-height: 100px;
 		margin-top: 30px;
 		margin-bottom: 30px;
 		border-radius: 50%;
+		padding: 0 10px;
+		background: #fff;
 	}
 
 	#numbers {
