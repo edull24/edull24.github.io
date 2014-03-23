@@ -1,6 +1,6 @@
-'use strict';
+(function(api, $, undefined) {
 
-(function(api, $) {
+	'use strict';
 
 	var dom = {},
 
@@ -16,6 +16,7 @@
 
 			dom.document = $(document);
 			dom.nav = $('nav');
+			dom.topBarSection = dom.nav.find('.top-bar-section');
 			dom.projectMenu = dom.nav.find('.project-menu');
 			dom.avatarImg = $('#avatar');
 			dom.numbersRow = $('#numbers');
@@ -25,91 +26,101 @@
 
 		},
 
-		setupFoundation = function() {
-
-			dom.document.foundation();
-
-		},
-
 		getUserData = function() {
 
 			var url = githubApi.base + 'users/edull24';
 
-			$.getJSON(url).done(function(data) {
+			return $.getJSON(url).done(function(response) {
 
-				userData = data;
+				userData = response;
 
-				$(function() {
+			});
 
-					dom.numberList.html(api.jst.numberItems(userData));
+		},
 
-					dom.numbersRow.removeClass('no-opacity');
+		processUserData = function() {
 
+			// User data has been fetched, wait for the dom (and our
+			// cached variables) to be ready and then add dynamic content.
+
+			$(function() {
+
+				dom.numberList.html(api.jst.numberItems(userData));
+
+			});
+
+		},
+
+		handleNoUserData = function() {
+
+			// Wait for the dom (and our cached variables) to be ready and
+			// then handle the failure.
+
+			$(function() {
+
+				var $alertTarget = dom.numberList.closest('.column');
+
+				dom.numberList.closest('.panel').remove();
+
+				injectAlert({
+					$target: $alertTarget,
+					failure: true,
+					msg: ''
 				});
 
 			});
 
 		},
 
-		getRepos = function(page) {
+		getRepos = function() {
 
-			var url = githubApi.base + 'users/edull24/repos?callback=?';
+			var url = githubApi.base + 'users/edull24/repos',
+				dfd = $.Deferred();
 
-			page = page || 1;
+			$.getJSON(url)
+				.done(function(response) {
 
-			$.getJSON(url, {
+					repos = response;
 
-				per_page: 100,
-				page: page
+					dfd.resolve();
 
-			}).done(function(response) {
+				})
+				.fail(function() {
 
-				processRepoData(response, page);
-
-			}).fail(function() {
-
-				handleNoRepos('fail');
-
-				showRepos();
-
-			});
-
-		},
-
-		processRepoData = function(response, page) {
-
-			if (response.data && response.data.length) {
-
-				// Save the repos and request the next batch.
-
-				repos = repos.concat(response.data);
-
-				getRepos(page + 1);
-
-			} else {
-
-				// All repos have been fetched, wait for the dom
-				// to be ready and then add dynamic content.
-
-				$(function() {
-
-					if (repos.length) {
-
-						injectRepoData();
-
-					} else {
-
-						// We have no repos.
-
-						handleNoRepos();
-
-					}
-
-					showRepos();
+					// Trigger a handleNoRepos() call indicating a
+					// failure occured (not a successful request that
+					// returned 0 repos).
+					dfd.reject(true);
 
 				});
 
-			}
+			return dfd.promise();
+
+		},
+
+		processRepoData = function() {
+
+			// All repos have been fetched, wait for the dom (and our
+			// cached variables) to be ready and then add dynamic content.
+
+			$(function() {
+
+				if (repos.length) {
+
+					injectRepoData();
+
+				} else {
+
+					// The data request was successful, but we have
+					// no repos in github.
+
+					handleNoRepos();
+
+				}
+
+				show(dom.topBarSection);
+
+			});
 
 		},
 
@@ -130,24 +141,49 @@
 
 		},
 
-		showRepos = function() {
+		injectAlert = function(args) {
 
-			dom.reposRow.removeClass('no-opacity');
+			args.$target.append(api.jst.alert({
+
+				failure: !!args.failure,
+				msg: args.msg
+			
+			}));
+
+			initFoundation();
+
+			rotateFrown(args.$target);
 
 		},
 
-		handleNoRepos = function(type) {
+		handleNoRepos = function(requestFailure) {
 
-			dom.reposList
-				.removeClass()
-				.addClass('no-repos')
-				.find('.alert-box')
-					.prepend(api.jst.noRepos({fail: type}));
+			// Wait for the dom (and our cached variables) to be ready and
+			// then handle the failure.
+
+			$(function() {
+
+				var $alertTarget = dom.reposList.closest('.column');
+
+				dom.topBarSection.remove();
+				dom.reposList.remove();
+
+				injectAlert({
+					$target: $alertTarget,
+					failure: requestFailure,
+					msg: 'You better get your game up and add some repos son!'
+				});
+
+			});
+
+		},
+
+		rotateFrown = function($target) {
 
 			// Hack to get transition delay to work.
 			setTimeout(function(){
 
-				dom.reposList
+				$target
 					.find('.frown')
 						.addClass('rotate');
 
@@ -155,20 +191,59 @@
 
 		},
 
+		showDataRows = function() {
+
+			show(dom.numbersRow);
+			show(dom.reposRow);
+
+		},
+
+		show = function($target) {
+
+			$target.removeClass('no-opacity');
+
+		},
+
+		initFoundation = function(args) {
+
+			args = args || {};
+
+			args.$target = args.$target || dom.document;
+
+			args.options = args.options || {};
+
+			args.$target.foundation(args.options);
+
+		},
+
 		init = function() {
 
-			setupDom();
+			$(function() {
 
-			setupFoundation();
+				setupDom();
+
+				initFoundation();
+
+			});
+
+			// Start fetching data.
+			// We'll wait for the dom to be ready before we actually process the data.
+			
+			$.when(
+
+				getUserData()
+					.done(processUserData)
+					.fail(handleNoUserData),
+
+				getRepos()
+					.done(processRepoData)
+					.fail(handleNoRepos)
+
+			).always(showDataRows);
 
 		};
 
-	// Make sure init() is registered as the first domready callback.
-	$(init);
-
-	// Start fetching data.
-	getUserData();
-	getRepos();
+	init();
 
 	// Debug
 	api.getDom = function(){return dom;};

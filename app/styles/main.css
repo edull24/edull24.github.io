@@ -36,6 +36,20 @@
 		opacity: 0;
 	}
 
+	.alert-box p {
+		margin-bottom: 0;
+	}
+
+	.alert-box .frown {
+		transition: transform 0.5s 1s;
+		display: inline-block;
+		font-size: 2rem;
+	}
+
+	.alert-box .frown.rotate {
+		transform: rotate(90deg);
+	}
+
 	/* Sticky footer */
 	.page-wrap {
 		min-height: 100%;
@@ -125,7 +139,8 @@
 	}
 
 	#numbers,
-	#repos {
+	#repos,
+	.top-bar-section {
 		transition: opacity 0.5s;
 	}
 
@@ -147,25 +162,8 @@
 		font-size: 3rem;
 	}
 
-	#repos ul.no-repos {
-		list-style: none;
-	}
-
-	#repos .frown {
-		transition: transform 0.5s 1s;
-		display: inline-block;
-	}
-
-	#repos .frown.rotate {
-		transform: rotate(90deg);
-	}
-
-	#repos ul:not(.no-repos) li {
+	#repos li {
 		height: 350px;
-	}
-
-	#repos .alert-box {
-		font-size: 1rem;
 	}
 
 	#repos li > a {

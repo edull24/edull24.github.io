@@ -4,32 +4,27 @@ this["app"]["jst"] = this["app"]["jst"] || {};
 this["app"]["jst"]["alert"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "";
-
-
-  return buffer;
-  });
-
-this["app"]["jst"]["noRepos"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, self=this;
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
   
-  return "\n\n	Bummer dude, looks like the repo request failed.\n\n";
+  return "\n\n			Bummer dude, looks like the request failed.\n\n		";
   }
 
 function program3(depth0,data) {
   
-  
-  return "\n\n	You better get your game up and add some repos son!\n\n";
+  var buffer = "", stack1;
+  buffer += "\n\n			"
+    + escapeExpression(((stack1 = (depth0 && depth0.msg)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\n\n		";
+  return buffer;
   }
 
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.fail), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
+  buffer += "<div class=\"alert-box text-center\" data-alert=\"\">\n\n	<p class=\"msg\">\n\n		";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.failure), {hash:{},inverse:self.program(3, program3, data),fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n\n<br>\n\n<div class=\"frown\">:(</div>";
+  buffer += "\n\n	</p>\n\n	<p class=\"frown\">:(</p>\n\n	<a href=\"#\" class=\"close\">&times;</a>\n\n</div>";
   return buffer;
   });
 
@@ -77,8 +72,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + escapeExpression(((stack1 = (depth0 && depth0.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</h2>\n\n		<h3>"
     + escapeExpression(((stack1 = (depth0 && depth0.language)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h3>\n\n		<p>\n			"
+    + "</h3>\n\n		<p>"
     + escapeExpression(((stack1 = (depth0 && depth0.description)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n		</p>\n\n	</a>\n\n</li>";
+    + "</p>\n\n	</a>\n\n</li>";
   return buffer;
   });
