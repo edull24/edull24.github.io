@@ -75,22 +75,6 @@
 
 					<div class="panel text-center">
 						<ul class="small-block-grid-2 medium-block-grid-4">
-							<li>
-								<div>Public Repos:</div>
-								<div data-api-key="public_repos"></div>
-							</li>
-							<li>
-								<div>Public Gists:</div>
-								<div data-api-key="public_gists"></div>
-							</li>
-							<li>
-								<div>Followers:</div>
-								<div data-api-key="followers"></div>
-							</li>
-							<li>
-								<div>Following:</div>
-								<div data-api-key="following"></div>
-							</li>
 						</ul>
 					</div>
 
@@ -99,7 +83,7 @@
 			</div>
 
 			<!-- The repos -->
-			<div id="repos" class="row">
+			<div id="repos" class="row no-opacity">
 				
 				<div class="column">
 
@@ -111,6 +95,20 @@
 
 					<ul class="small-block-grid-1 medium-block-grid-3 large-block-grid-4">
 						
+						<li>
+
+							<!--
+								Avoid having to reinitialize Foundation by
+								placing the alert in the markup by default.
+							-->
+							<div class="alert-box text-center" data-alert="">
+
+								<a href="#" class="close">&times;</a>
+							
+							</div>
+
+						</li>
+
 					</ul>
 
 				</div>
@@ -164,7 +162,9 @@
 		<!-- bower:js -->
 		<script src="bower_components/jquery/dist/jquery.js"></script>
 		<script src="bower_components/fastclick/lib/fastclick.js"></script>
-		<script src="bower_components/foundation/js/foundation.js"></script>
+		<script src="bower_components/foundation/js/foundation/foundation.js"></script>
+		<script src="bower_components/foundation/js/foundation/foundation.topbar.js"></script>
+		<script src="bower_components/foundation/js/foundation/foundation.alert.js"></script>
 		<script src="bower_components/handlebars/handlebars.runtime.min.js"></script>
 		<!-- endbower -->
 		<!-- endbuild -->

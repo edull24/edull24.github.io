@@ -124,7 +124,8 @@
 		background: #fff;
 	}
 
-	#numbers {
+	#numbers,
+	#repos {
 		transition: opacity 0.5s;
 	}
 
@@ -146,8 +147,25 @@
 		font-size: 3rem;
 	}
 
-	#repos li {
+	#repos ul.no-repos {
+		list-style: none;
+	}
+
+	#repos .frown {
+		transition: transform 0.5s 1s;
+		display: inline-block;
+	}
+
+	#repos .frown.rotate {
+		transform: rotate(90deg);
+	}
+
+	#repos ul:not(.no-repos) li {
 		height: 350px;
+	}
+
+	#repos .alert-box {
+		font-size: 1rem;
 	}
 
 	#repos li > a {
