@@ -45,6 +45,10 @@ module.exports = function (grunt) {
             gruntfile: {
                 files: ['Gruntfile.js']
             },
+            compass: {
+                files: ['<%= config.app %>/styles/{,*/}*.{scss,sass}'],
+                tasks: ['compass:server', 'autoprefixer']
+            },
             styles: {
                 files: ['<%= config.app %>/styles/{,*/}*.css'],
                 tasks: ['newer:copy:styles', 'autoprefixer']
@@ -59,6 +63,7 @@ module.exports = function (grunt) {
                     '<%= config.app %>/images/{,*/}*'
                 ]
             },
+            // Custom add.
             handlebars: {
                 files: ['<%= config.app %>/scripts/templates/**/*.hbs'],
                 tasks: ['handlebars']
@@ -125,6 +130,7 @@ module.exports = function (grunt) {
             all: [
                 'Gruntfile.js',
                 '<%= config.app %>/scripts/{,*/}*.js',
+                // Custom add.
                 '!<%= config.app %>/scripts/templates.js',
                 '!<%= config.app %>/scripts/vendor/*',
                 'test/spec/{,*/}*.js'
@@ -137,6 +143,35 @@ module.exports = function (grunt) {
                 options: {
                     run: true,
                     urls: ['http://<%= connect.test.options.hostname %>:<%= connect.test.options.port %>/index.html']
+                }
+            }
+        },
+
+        // Compiles Sass to CSS and generates necessary files if requested
+        compass: {
+            options: {
+                sassDir: '<%= config.app %>/styles',
+                cssDir: '.tmp/styles',
+                generatedImagesDir: '.tmp/images/generated',
+                imagesDir: '<%= config.app %>/images',
+                javascriptsDir: '<%= config.app %>/scripts',
+                fontsDir: '<%= config.app %>/styles/fonts',
+                // Custom mod.
+                importPath: '<%= config.app %>/bower_components/foundation/scss',
+                httpImagesPath: '/images',
+                httpGeneratedImagesPath: '/images/generated',
+                httpFontsPath: '/styles/fonts',
+                relativeAssets: false,
+                assetCacheBuster: false
+            },
+            dist: {
+                options: {
+                    generatedImagesDir: '<%= config.dist %>/images/generated'
+                }
+            },
+            server: {
+                options: {
+                    debugInfo: true
                 }
             }
         },
@@ -160,7 +195,12 @@ module.exports = function (grunt) {
         bowerInstall: {
             app: {
                 src: ['<%= config.app %>/index.html'],
-                ignorePath: '<%= config.app %>/'
+                ignorePath: '<%= config.app %>/',
+                exclude: ['<%= config.app %>/bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap.js']
+            },
+            sass: {
+                src: ['<%= config.app %>/styles/{,*/}*.{scss,sass}'],
+                ignorePath: '<%= config.app %>/bower_components/'
             }
         },
 
@@ -194,9 +234,11 @@ module.exports = function (grunt) {
             options: {
                 assetsDirs: [
                     '<%= config.dist %>',
+                    // Custom add.
                     '<%= config.dist %>/styles',
                     '<%= config.dist %>/images'
                 ],
+                // Custom add.
                 patterns: {
                     css: [
                         [/(images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the CSS to reference our revved images'],
@@ -249,6 +291,16 @@ module.exports = function (grunt) {
                     src: '{,*/}*.html',
                     dest: '<%= config.dist %>'
                 }]
+            }
+        },
+
+        // Custom add.
+        uglify: {
+            options: {
+                preserveComments: false,
+                compress: {
+                    drop_console: true
+                }
             }
         },
 
@@ -320,18 +372,21 @@ module.exports = function (grunt) {
         // Run some tasks in parallel to speed up build process
         concurrent: {
             server: [
+                'compass:server',
                 'copy:styles'
             ],
             test: [
                 'copy:styles'
             ],
             dist: [
+                'compass',
                 'copy:styles',
                 'imagemin',
                 'svgmin'
             ]
         },
 
+        // Custom add.
         handlebars: {
             compile: {
                 options: {
@@ -339,6 +394,12 @@ module.exports = function (grunt) {
                     processName: function(filename) {
                         // Make the template key on app.jst[key] be just the template file name.
                         return filename.replace(/^app\/scripts\/templates\//, '').replace(/\.hbs$/, '');
+                    },
+                    processContent: function(content) {
+                        // Removes leading and trailing spaces to shorten templates.
+                        content = content.replace(/^[\x20\t]+/mg, '').replace(/[\x20\t]+$/mg, '');
+                        content = content.replace(/^[\r\n]+/, '').replace(/[\r\n]*$/, '\n');
+                        return content;
                     }
                 },
                 files: {
@@ -356,6 +417,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            // Custom add.
             'handlebars',
             'concurrent:server',
             'autoprefixer',
@@ -386,6 +448,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
+        // Custom add.
         'handlebars',
         'useminPrepare',
         'concurrent:dist',
