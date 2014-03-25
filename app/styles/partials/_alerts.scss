@@ -1,13 +1,19 @@
-.alert-box p {
-	margin-bottom: 0;
-}
+.alert-box {
 
-.alert-box .frown {
-	transition: transform 0.5s 1s;
-	display: inline-block;
-	font-size: 2rem;
-}
+	p {
+		margin-bottom: 0;
+	}
 
-.alert-box .frown.rotate {
-	transform: rotate(90deg);
+	.frown {
+		
+		transition: transform 0.5s 1s;
+		display: inline-block;
+		font-size: 2rem;
+
+		&.rotate {
+			transform: rotate(90deg);
+		}
+
+	}
+
 }
