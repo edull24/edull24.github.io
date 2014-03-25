@@ -43,11 +43,11 @@ module.exports = function (grunt) {
             },
             compass: {
                 files: ['<%= config.app %>/styles/{,*/}*.{scss,sass}'],
-                tasks: ['compass:server', 'autoprefixer']
+                tasks: ['compass:server']
             },
             styles: {
                 files: ['<%= config.app %>/styles/{,*/}*.css'],
-                tasks: ['newer:copy:styles', 'autoprefixer']
+                tasks: [/*'newer:copy:styles',*/ 'newer:autoprefixer']
             },
             livereload: {
                 options: {
@@ -55,7 +55,7 @@ module.exports = function (grunt) {
                 },
                 files: [
                     '<%= config.app %>/{,*/}*.html',
-                    '.tmp/styles/{,*/}*.css',
+                    '<%= config.app %>/styles/{,*/}*.css',
                     '<%= config.app %>/images/{,*/}*'
                 ]
             },
@@ -147,7 +147,7 @@ module.exports = function (grunt) {
         compass: {
             options: {
                 sassDir: '<%= config.app %>/styles',
-                cssDir: '.tmp/styles',
+                cssDir: '<%= config.app %>/styles',
                 generatedImagesDir: '.tmp/images/generated',
                 imagesDir: '<%= config.app %>/images',
                 javascriptsDir: '<%= config.app %>/scripts',
@@ -180,9 +180,9 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '.tmp/styles/',
+                    cwd: '<%= config.app %>/styles',
                     src: '{,*/}*.css',
-                    dest: '.tmp/styles/'
+                    dest: '<%= config.app %>/styles'
                 }]
             }
         },
@@ -329,13 +329,6 @@ module.exports = function (grunt) {
                         'styles/fonts/{,*/}*.*'
                     ]
                 }]
-            },
-            styles: {
-                expand: true,
-                dot: true,
-                cwd: '<%= config.app %>/styles',
-                dest: '.tmp/styles/',
-                src: '{,*/}*.css'
             }
         },
 
@@ -355,15 +348,10 @@ module.exports = function (grunt) {
         // Run some tasks in parallel to speed up build process
         concurrent: {
             server: [
-                'compass:server',
-                'copy:styles'
             ],
             test: [
-                'copy:styles'
             ],
             dist: [
-                'compass',
-                'copy:styles',
                 'imagemin',
                 'svgmin'
             ]
@@ -402,7 +390,8 @@ module.exports = function (grunt) {
             'clean:server',
             // Custom add.
             'handlebars',
-            'concurrent:server',
+            'compass:server',
+            // 'concurrent:server',
             'autoprefixer',
             'connect:livereload',
             'watch'
@@ -434,6 +423,7 @@ module.exports = function (grunt) {
         // Custom add.
         'handlebars',
         'useminPrepare',
+        'compass:dist',
         'concurrent:dist',
         'autoprefixer',
         'concat',
