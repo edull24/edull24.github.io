@@ -361,7 +361,7 @@ module.exports = function (grunt) {
         handlebars: {
             compile: {
                 options: {
-                    namespace: 'app.jst',
+                    amd: true,
                     processName: function(filename) {
                         // Make the template key on app.jst[key] be just the template file name.
                         return filename.replace(/^app\/scripts\/templates\//, '').replace(/\.hbs$/, '');

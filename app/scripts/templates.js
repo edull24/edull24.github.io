@@ -1,7 +1,8 @@
-this["app"] = this["app"] || {};
-this["app"]["jst"] = this["app"]["jst"] || {};
+define(['handlebars'], function(Handlebars) {
 
-this["app"]["jst"]["alert"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["JST"] = this["JST"] || {};
+
+this["JST"]["alert"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -28,7 +29,7 @@ function program3(depth0,data) {
   return buffer;
   });
 
-this["app"]["jst"]["numberItems"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["JST"]["numberItems"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
@@ -46,7 +47,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-this["app"]["jst"]["projectMenuItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["JST"]["projectMenuItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
@@ -60,7 +61,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-this["app"]["jst"]["repoItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["JST"]["repoItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
@@ -77,3 +78,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + "</p>\n\n</a>\n\n</li>\n";
   return buffer;
   });
+
+return this["JST"];
+
+});
