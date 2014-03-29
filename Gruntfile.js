@@ -377,12 +377,59 @@ module.exports = function (grunt) {
                     '<%= config.app %>/scripts/templates.js': ['<%= config.app %>/scripts/templates/**/*.hbs']
                 }
             }
+        },
+
+        requirejs: {
+            dist: {
+                // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
+                options: {
+                    name: '../bower_components/almond/almond',
+                    out: '<%= config.dist %>/scripts/main.js',
+                    baseUrl: '<%= config.app %>/scripts',
+                    mainConfigFile: '<%= config.app %>/scripts/main.js',
+                    optimize: 'uglify',
+                    uglify: {
+                        preserveComments: false,
+                        compress: {
+                            drop_console: true
+                        }
+                    },
+                    include: ['main'],
+                    // TODO: Figure out how to make sourcemaps work with grunt-usemin
+                    // https://github.com/yeoman/grunt-usemin/issues/30
+                    // generateSourceMaps: true,
+                    // required to support SourceMaps
+                    // http://requirejs.org/docs/errors.html#sourcemapcomments
+                    preserveLicenseComments: false,
+                    useStrict: true,
+                    // Setting this to true beaks Handlebars.
+                    wrap: true
+                    //uglify2: {} // https://github.com/mishoo/UglifyJS2
+                }
+            }
+        },
+
+        // Replace require.js with our built and revved main.js file.
+        // Usemin no longer supports require.js.
+        dom_munger: {
+            main: {
+                options: {
+                    callback: function($) {
+                        var $requireScript = $('script[src$="require.js"]'),
+                            newSrc = $requireScript.attr('data-main') + '.js';
+                        $requireScript.attr('data-main', '');
+                        $requireScript.attr('src', newSrc);
+                    }
+                },
+                src: '<%= config.dist %>/index.html'
+            }
         }
     });
 
 
     grunt.registerTask('serve', function (target) {
         if (target === 'dist') {
+            // temporarily commenting build for require testing purposes
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
 
@@ -421,8 +468,9 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'handlebars',
-        'useminPrepare',
         'compass:dist',
+        'useminPrepare',
+        'requirejs',
         'concurrent:dist',
         'autoprefixer',
         'concat',
@@ -432,7 +480,8 @@ module.exports = function (grunt) {
         'modernizr',
         'rev',
         'usemin',
-        'htmlmin'
+        'htmlmin',
+        'dom_munger'
     ]);
 
     grunt.registerTask('default', [

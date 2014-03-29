@@ -21,7 +21,15 @@ require.config({
 			]
 		},
 		'handlebars': {
-			'exports': 'Handlebars'
+			'exports': 'Handlebars',
+			'init': function() {
+				// Since we are setting the config
+				// option wrap: true in the requirejs
+				// grunt task, we must make sure Handlebars
+				// gets registered as a global variable since
+				// Handlebars isn't an AMD module.
+				return Handlebars;
+			}
 		}
 	},
 	'paths': {
