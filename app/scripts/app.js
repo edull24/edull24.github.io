@@ -257,11 +257,6 @@ function($, templates) {
 
     };
 
-    // Debug
-    api.getDom = function(){return dom;};
-    api.getRepos = function() {return repos;};
-    api.getUser= function() {return userData;};
-
     return api;
 
 });
