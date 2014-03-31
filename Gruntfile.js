@@ -1,4 +1,3 @@
-// Generated on 2014-03-17 using generator-webapp 0.4.8
 'use strict';
 
 // # Globbing
@@ -9,23 +8,23 @@
 
 module.exports = function (grunt) {
 
-    // Load grunt tasks automatically
+    // Load grunt tasks automatically.
     require('load-grunt-tasks')(grunt);
 
-    // Time how long tasks take. Can help when optimizing build times
+    // Time how long tasks take. Can help when optimizing build times.
     require('time-grunt')(grunt);
 
-    // Define the configuration for all the tasks
+    // Define the configuration for all the tasks.
     grunt.initConfig({
 
-        // Project settings
+        // Project settings.
         config: {
-            // Configurable paths
+            // Configurable paths.
             app: 'app',
             dist: 'dist'
         },
 
-        // Watches files for changes and runs tasks based on the changed files
+        // Watches files for changes and runs tasks based on the changed files.
         watch: {
             js: {
                 files: ['<%= config.app %>/scripts/{,*/}*.js'],
@@ -47,7 +46,7 @@ module.exports = function (grunt) {
             },
             styles: {
                 files: ['<%= config.app %>/styles/{,*/}*.css'],
-                tasks: [/*'newer:copy:styles',*/ 'newer:autoprefixer']
+                tasks: ['newer:autoprefixer']
             },
             livereload: {
                 options: {
@@ -59,19 +58,18 @@ module.exports = function (grunt) {
                     '<%= config.app %>/images/{,*/}*'
                 ]
             },
-            // Custom add.
             handlebars: {
                 files: ['<%= config.app %>/scripts/templates/**/*.hbs'],
                 tasks: ['handlebars']
             }
         },
 
-        // The actual grunt server settings
+        // The actual grunt server settings.
         connect: {
             options: {
                 port: 9000,
                 livereload: 35729,
-                // Change this to '0.0.0.0' to access the server from outside
+                // Change this to '0.0.0.0' to access the server from outside.
                 hostname: 'localhost'
             },
             livereload: {
@@ -102,7 +100,7 @@ module.exports = function (grunt) {
             }
         },
 
-        // Empties folders to start fresh
+        // Empties folders to start fresh.
         clean: {
             dist: {
                 files: [{
@@ -117,7 +115,7 @@ module.exports = function (grunt) {
             server: '.tmp'
         },
 
-        // Make sure code styles are up to par and there are no obvious mistakes
+        // Make sure code styles are up to par and there are no obvious mistakes.
         jshint: {
             options: {
                 jshintrc: '.jshintrc',
@@ -126,14 +124,13 @@ module.exports = function (grunt) {
             all: [
                 'Gruntfile.js',
                 '<%= config.app %>/scripts/{,*/}*.js',
-                // Custom add.
                 '!<%= config.app %>/scripts/templates.js',
                 '!<%= config.app %>/scripts/vendor/*',
                 'test/spec/{,*/}*.js'
             ]
         },
 
-        // Mocha testing framework configuration options
+        // Mocha testing framework configuration options.
         mocha: {
             all: {
                 options: {
@@ -143,7 +140,7 @@ module.exports = function (grunt) {
             }
         },
 
-        // Compiles Sass to CSS and generates necessary files if requested
+        // Compiles Sass to CSS and generates necessary files if requested.
         compass: {
             options: {
                 sassDir: '<%= config.app %>/styles',
@@ -152,7 +149,6 @@ module.exports = function (grunt) {
                 imagesDir: '<%= config.app %>/images',
                 javascriptsDir: '<%= config.app %>/scripts',
                 fontsDir: '<%= config.app %>/styles/fonts',
-                // Custom mod.
                 importPath: '<%= config.app %>/bower_components/foundation/scss',
                 httpImagesPath: '/images',
                 httpGeneratedImagesPath: '/images/generated',
@@ -172,7 +168,7 @@ module.exports = function (grunt) {
             }
         },
 
-        // Add vendor prefixed styles
+        // Add vendor prefixed styles.
         autoprefixer: {
             options: {
                 browsers: ['last 1 version']
@@ -187,7 +183,7 @@ module.exports = function (grunt) {
             }
         },
 
-        // Renames files for browser caching purposes
+        // Renames files for browser caching purposes.
         rev: {
             dist: {
                 files: {
@@ -204,7 +200,7 @@ module.exports = function (grunt) {
 
         // Reads HTML for usemin blocks to enable smart builds that automatically
         // concat, minify and revision files. Creates configurations in memory so
-        // additional tasks can operate on them
+        // additional tasks can operate on them.
         useminPrepare: {
             options: {
                 dest: '<%= config.dist %>'
@@ -212,16 +208,14 @@ module.exports = function (grunt) {
             html: '<%= config.app %>/index.html'
         },
 
-        // Performs rewrites based on rev and the useminPrepare configuration
+        // Performs rewrites based on rev and the useminPrepare configuration.
         usemin: {
             options: {
                 assetsDirs: [
                     '<%= config.dist %>',
-                    // Custom add.
                     '<%= config.dist %>/styles',
                     '<%= config.dist %>/images'
                 ],
-                // Custom add.
                 patterns: {
                     css: [
                         [/(images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the CSS to reference our revved images'],
@@ -233,7 +227,7 @@ module.exports = function (grunt) {
             css: ['<%= config.dist %>/styles/{,*/}*.css']
         },
 
-        // The following *-min tasks produce minified files in the dist folder
+        // The following *-min tasks produce minified files in the dist folder.
         imagemin: {
             dist: {
                 files: [{
@@ -277,7 +271,6 @@ module.exports = function (grunt) {
             }
         },
 
-        // Custom add.
         uglify: {
             options: {
                 preserveComments: false,
@@ -313,7 +306,7 @@ module.exports = function (grunt) {
         //     dist: {}
         // },
 
-        // Copies remaining files to places other tasks can use
+        // Copies remaining files to places other tasks can use.
         copy: {
             dist: {
                 files: [{
@@ -333,7 +326,7 @@ module.exports = function (grunt) {
         },
 
         // Generates a custom Modernizr build that includes only the tests you
-        // reference in your app
+        // reference in your app.
         modernizr: {
             devFile: '<%= config.app %>/bower_components/modernizr/modernizr.js',
             outputFile: '<%= config.dist %>/scripts/modernizr.js',
@@ -345,7 +338,7 @@ module.exports = function (grunt) {
             uglify: true
         },
 
-        // Run some tasks in parallel to speed up build process
+        // Run some tasks in parallel to speed up build process.
         concurrent: {
             server: [
             ],
@@ -357,7 +350,6 @@ module.exports = function (grunt) {
             ]
         },
 
-        // Custom add.
         handlebars: {
             compile: {
                 options: {
@@ -402,7 +394,7 @@ module.exports = function (grunt) {
                     // http://requirejs.org/docs/errors.html#sourcemapcomments
                     preserveLicenseComments: false,
                     useStrict: true,
-                    // Setting this to true beaks Handlebars.
+                    // Setting this to true beaks Handlebars. See shim init() in config file for fix.
                     wrap: true
                     //uglify2: {} // https://github.com/mishoo/UglifyJS2
                 }
@@ -429,25 +421,17 @@ module.exports = function (grunt) {
 
     grunt.registerTask('serve', function (target) {
         if (target === 'dist') {
-            // temporarily commenting build for require testing purposes
             return grunt.task.run(['build', 'connect:dist:keepalive']);
         }
 
         grunt.task.run([
             'clean:server',
-            // Custom add.
             'handlebars',
             'compass:server',
-            // 'concurrent:server',
             'autoprefixer',
             'connect:livereload',
             'watch'
         ]);
-    });
-
-    grunt.registerTask('server', function (target) {
-        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
-        grunt.task.run([target ? ('serve:' + target) : 'serve']);
     });
 
     grunt.registerTask('test', function (target) {
