@@ -1,4 +1,8 @@
 {
+    "globals": {
+        "Handlebars": false,
+        "define": false
+    },
     "node": true,
     "browser": true,
     "esnext": true,
@@ -6,12 +10,14 @@
     "camelcase": false,
     "curly": true,
     "eqeqeq": true,
+    "freeze": true,
     "immed": true,
     "indent": 4,
     "latedef": true,
     "newcap": true,
     "noarg": true,
-    //"quotmark": "single",
+    "noempty": true,
+    "quotmark": "single",
     "undef": true,
     "unused": true,
     "strict": true,
