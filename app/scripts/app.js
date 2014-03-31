@@ -201,8 +201,12 @@ function($, templates) {
 
 		showDataRows = function() {
 
-			show(dom.numbersRow);
-			show(dom.reposRow);
+			$(function() {
+
+				show(dom.numbersRow);
+				show(dom.reposRow);
+
+			});
 
 		},
 
