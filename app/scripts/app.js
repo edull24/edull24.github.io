@@ -1,267 +1,267 @@
 define(
 [
-	'jquery',
-	'templates'
+    'jquery',
+    'templates'
 ],
 function($, templates) {
 
-	'use strict';
+    'use strict';
 
-	var api = {},
+    var api = {},
 
-		dom = {},
+        dom = {},
 
-		userData = {},
+        userData = {},
 
-		githubApi = {
-			base: 'https://api.github.com/',
-			user: 'edull24'
-		},
+        githubApi = {
+            base: 'https://api.github.com/',
+            user: 'edull24'
+        },
 
-		repos = [],
+        repos = [],
 
-		setupDom = function() {
+        setupDom = function() {
 
-			dom.document = $(document);
-			dom.nav = $('nav');
-			dom.topBarSection = dom.nav.find('.top-bar-section');
-			dom.projectMenu = dom.nav.find('.project-menu');
-			dom.avatarImg = $('#avatar');
-			dom.numbersRow = $('#numbers');
-			dom.numberList = dom.numbersRow.find('ul');
-			dom.reposRow = $('#repos');
-			dom.reposList = dom.reposRow.find('ul');
+            dom.document = $(document);
+            dom.nav = $('nav');
+            dom.topBarSection = dom.nav.find('.top-bar-section');
+            dom.projectMenu = dom.nav.find('.project-menu');
+            dom.avatarImg = $('#avatar');
+            dom.numbersRow = $('#numbers');
+            dom.numberList = dom.numbersRow.find('ul');
+            dom.reposRow = $('#repos');
+            dom.reposList = dom.reposRow.find('ul');
 
-		},
+        },
 
-		getUserData = function() {
+        getUserData = function() {
 
-			var url = githubApi.base + 'users/' + githubApi.user;
+            var url = githubApi.base + 'users/' + githubApi.user;
 
-			return $.getJSON(url).done(function(response) {
+            return $.getJSON(url).done(function(response) {
 
-				userData = response;
+                userData = response;
 
-			});
+            });
 
-		},
+        },
 
-		processUserData = function() {
+        processUserData = function() {
 
-			// User data has been fetched, wait for the dom (and our
-			// cached variables) to be ready and then add dynamic content.
+            // User data has been fetched, wait for the dom (and our
+            // cached variables) to be ready and then add dynamic content.
 
-			$(function() {
+            $(function() {
 
-				dom.numberList.html(templates.numberItems(userData));
+                dom.numberList.html(templates.numberItems(userData));
 
-			});
+            });
 
-		},
+        },
 
-		handleNoUserData = function() {
+        handleNoUserData = function() {
 
-			// Wait for the dom (and our cached variables) to be ready and
-			// then handle the failure.
+            // Wait for the dom (and our cached variables) to be ready and
+            // then handle the failure.
 
-			$(function() {
+            $(function() {
 
-				var $alertTarget = dom.numberList.closest('.column');
+                var $alertTarget = dom.numberList.closest('.column');
 
-				dom.numberList.closest('.panel').remove();
+                dom.numberList.closest('.panel').remove();
 
-				injectAlert({
-					$target: $alertTarget,
-					failure: true,
-					msg: ''
-				});
+                injectAlert({
+                    $target: $alertTarget,
+                    failure: true,
+                    msg: ''
+                });
 
-			});
+            });
 
-		},
+        },
 
-		getRepos = function() {
+        getRepos = function() {
 
-			var url = githubApi.base + 'users/' + githubApi.user + '/repos',
-				dfd = $.Deferred();
+            var url = githubApi.base + 'users/' + githubApi.user + '/repos',
+                dfd = $.Deferred();
 
-			$.getJSON(url)
-				.done(function(response) {
+            $.getJSON(url)
+                .done(function(response) {
 
-					repos = response;
+                    repos = response;
 
-					dfd.resolve();
+                    dfd.resolve();
 
-				})
-				.fail(function() {
+                })
+                .fail(function() {
 
-					// Trigger a handleNoRepos() call indicating a
-					// failure occured (not a successful request that
-					// returned 0 repos).
-					dfd.reject(true);
+                    // Trigger a handleNoRepos() call indicating a
+                    // failure occured (not a successful request that
+                    // returned 0 repos).
+                    dfd.reject(true);
 
-				});
+                });
 
-			return dfd.promise();
+            return dfd.promise();
 
-		},
+        },
 
-		processRepoData = function() {
+        processRepoData = function() {
 
-			// All repos have been fetched, wait for the dom (and our
-			// cached variables) to be ready and then add dynamic content.
+            // All repos have been fetched, wait for the dom (and our
+            // cached variables) to be ready and then add dynamic content.
 
-			$(function() {
+            $(function() {
 
-				if (repos.length) {
+                if (repos.length) {
 
-					injectRepoData();
+                    injectRepoData();
 
-				} else {
+                } else {
 
-					// The data request was successful, but we have
-					// no repos in github.
+                    // The data request was successful, but we have
+                    // no repos in github.
 
-					handleNoRepos();
+                    handleNoRepos();
 
-				}
+                }
 
-				show(dom.topBarSection);
+                show(dom.topBarSection);
 
-			});
+            });
 
-		},
+        },
 
-		injectRepoData = function() {
+        injectRepoData = function() {
 
-			var projectItems = '',
-				repoItems = '';
+            var projectItems = '',
+                repoItems = '';
 
-			$.each(repos, function(i, repo) {
+            $.each(repos, function(i, repo) {
 
-				projectItems += templates.projectMenuItem(repo);
-				repoItems += templates.repoItem(repo);
+                projectItems += templates.projectMenuItem(repo);
+                repoItems += templates.repoItem(repo);
 
-			});
+            });
 
-			dom.projectMenu.append(projectItems);
-			dom.reposList.html(repoItems);
+            dom.projectMenu.append(projectItems);
+            dom.reposList.html(repoItems);
 
-		},
+        },
 
-		injectAlert = function(args) {
+        injectAlert = function(args) {
 
-			args.$target.append(templates.alert({
+            args.$target.append(templates.alert({
 
-				failure: !!args.failure,
-				msg: args.msg
-			
-			}));
+                failure: !!args.failure,
+                msg: args.msg
 
-			initFoundation();
+            }));
 
-			rotateFrown(args.$target);
+            initFoundation();
 
-		},
+            rotateFrown(args.$target);
 
-		handleNoRepos = function(requestFailure) {
+        },
 
-			// Wait for the dom (and our cached variables) to be ready and
-			// then handle the failure.
+        handleNoRepos = function(requestFailure) {
 
-			$(function() {
+            // Wait for the dom (and our cached variables) to be ready and
+            // then handle the failure.
 
-				var $alertTarget = dom.reposList.closest('.column');
+            $(function() {
 
-				dom.topBarSection.remove();
-				dom.reposList.remove();
+                var $alertTarget = dom.reposList.closest('.column');
 
-				injectAlert({
-					$target: $alertTarget,
-					failure: requestFailure,
-					msg: 'You better get your game up and add some repos son!'
-				});
+                dom.topBarSection.remove();
+                dom.reposList.remove();
 
-			});
+                injectAlert({
+                    $target: $alertTarget,
+                    failure: requestFailure,
+                    msg: 'You better get your game up and add some repos son!'
+                });
 
-		},
+            });
 
-		rotateFrown = function($target) {
+        },
 
-			// Hack to get transition delay to work.
-			setTimeout(function(){
+        rotateFrown = function($target) {
 
-				$target
-					.find('.frown')
-						.addClass('rotate');
+            // Hack to get transition delay to work.
+            setTimeout(function(){
 
-			}, 0);
+                $target
+                    .find('.frown')
+                        .addClass('rotate');
 
-		},
+            }, 0);
 
-		showDataRows = function() {
+        },
 
-			$(function() {
+        showDataRows = function() {
 
-				show(dom.numbersRow);
-				show(dom.reposRow);
+            $(function() {
 
-			});
+                show(dom.numbersRow);
+                show(dom.reposRow);
 
-		},
+            });
 
-		show = function($target) {
+        },
 
-			$target.removeClass('no-opacity');
+        show = function($target) {
 
-		},
+            $target.removeClass('no-opacity');
 
-		initFoundation = function(args) {
+        },
 
-			args = args || {};
+        initFoundation = function(args) {
 
-			args.$target = args.$target || dom.document;
+            args = args || {};
 
-			args.options = args.options || {};
+            args.$target = args.$target || dom.document;
 
-			args.$target.foundation(args.options);
+            args.options = args.options || {};
 
-		};
+            args.$target.foundation(args.options);
 
-	api.init = function() {
+        };
 
-		console.log('app.js init...');
+    api.init = function() {
 
-		$(function() {
+        console.log('app.js init...');
 
-			setupDom();
+        $(function() {
 
-			initFoundation();
+            setupDom();
 
-		});
+            initFoundation();
 
-		// Start fetching data.
-		// We'll wait for the dom to be ready before we actually process the data.
-		
-		$.when(
+        });
 
-			getUserData()
-				.done(processUserData)
-				.fail(handleNoUserData),
+        // Start fetching data.
+        // We'll wait for the dom to be ready before we actually process the data.
 
-			getRepos()
-				.done(processRepoData)
-				.fail(handleNoRepos)
+        $.when(
 
-		).always(showDataRows);
+            getUserData()
+                .done(processUserData)
+                .fail(handleNoUserData),
 
-	};
+            getRepos()
+                .done(processRepoData)
+                .fail(handleNoRepos)
 
-	// Debug
-	api.getDom = function(){return dom;};
-	api.getRepos = function() {return repos;};
-	api.getUser= function() {return userData;};
+        ).always(showDataRows);
 
-	return api;
+    };
+
+    // Debug
+    api.getDom = function(){return dom;};
+    api.getRepos = function() {return repos;};
+    api.getUser= function() {return userData;};
+
+    return api;
 
 });

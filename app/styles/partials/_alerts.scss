@@ -1,19 +1,19 @@
 .alert-box {
 
-	p {
-		margin-bottom: 0;
-	}
+    p {
+        margin-bottom: 0;
+    }
 
-	.frown {
-		
-		transition: transform 0.5s 1s;
-		display: inline-block;
-		font-size: 2rem;
+    .frown {
 
-		&.rotate {
-			transform: rotate(90deg);
-		}
+        transition: transform 0.5s 1s;
+        display: inline-block;
+        font-size: 2rem;
 
-	}
+        &.rotate {
+            transform: rotate(90deg);
+        }
+
+    }
 
 }

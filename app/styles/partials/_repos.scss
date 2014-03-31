@@ -1,34 +1,34 @@
 #repos {
 
-	li {
-		
-		height: 350px;
+    li {
 
-		> a {
-			overflow: hidden;
-			display: block;
-			width: 100%;
-			height: 100%;
-			padding: 20px;
-			background: #eaeff0;
+        height: 350px;
 
-			@media #{$medium-up} {
-				box-shadow: 0px 5px 20px -5px rgba(0,0,0,1);
-			}
-		}
+        > a {
+            overflow: hidden;
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            background: #eaeff0;
 
-		h2 {
-			font-size: 1.5rem;
-			margin-bottom: 0;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
+            @media #{$medium-up} {
+                box-shadow: 0px 5px 20px -5px rgba(0,0,0,1);
+            }
+        }
 
-		h3 {
-			font-size: 0.8rem;
-			color: gray;
-		}
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-	}
+        h3 {
+            font-size: 0.8rem;
+            color: gray;
+        }
+
+    }
 
 }
